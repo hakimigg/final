@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import ErrorBoundary from './components/ErrorBoundary';
 import Layout from './entities/Layout';
 import HomePage from './pages/HomePage';
