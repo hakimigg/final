@@ -63,9 +63,26 @@ export const AdminProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      // Hardcoded admin credentials for security
-      const ADMIN_EMAIL = 'admin@beta-secure-2024';
-      const ADMIN_PASSWORD = 'BetaAdmin#2024!Secure';
+      // First try Supabase authentication
+      if (supabase) {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+        if (error) {
+          console.error('Supabase auth error:', error);
+          // Fall back to hardcoded credentials if Supabase fails
+        } else if (data.user) {
+          setUser(data.user);
+          setIsAuthenticated(true);
+          return { success: true };
+        }
+      }
+
+      // Fallback: Hardcoded admin credentials for security
+      const ADMIN_EMAIL = 'example@gmail.com';
+      const ADMIN_PASSWORD = 'admin123';
 
       if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
         // Create a mock user object for the hardcoded admin

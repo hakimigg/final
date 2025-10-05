@@ -143,7 +143,7 @@ export default function Layout({ children, currentPageName }) {
               <h4 className="font-semibold text-lg mb-4 text-amber-400">Quick Links</h4>
               <div className="space-y-2">
                 <Link to={createPageUrl("Products")} className="block text-stone-300 hover:text-amber-400 transition-colors">Shop All</Link>
-                <Link to={createPageUrl("About")} className="block text-stone-300 hover:text-amber-400 transition-colors">Our Story</Link>
+                <Link to={createPageUrl("About")} className="block text-stone-300 hover:text-amber-400 transition-colors">Our Purpose</Link>
               </div>
             </div>
             <div>

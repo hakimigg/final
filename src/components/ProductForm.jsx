@@ -55,9 +55,7 @@ export default function ProductForm({ product, onClose, onSave }) {
       newErrors.price = 'Valid price is required';
     }
 
-    if (!formData.image_url.trim()) {
-      newErrors.image_url = 'Product image URL is required';
-    }
+    // Image URL is now optional
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -246,7 +244,7 @@ export default function ProductForm({ product, onClose, onSave }) {
                 currentImage={formData.image_url}
                 onImageUploaded={handleMainImageUpload}
                 folder="products"
-                label="Main Product Image *"
+                label="Main Product Image (Optional)"
               />
               {errors.image_url && (
                 <p className="mt-1 text-sm text-red-600">{errors.image_url}</p>

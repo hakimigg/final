@@ -349,15 +349,31 @@ export class Product {
     }
     
     try {
+      // Check if Supabase is configured
+      if (!supabase || process.env.REACT_APP_SUPABASE_URL === 'YOUR_SUPABASE_URL') {
+        throw new Error('Supabase not configured. Please check your environment variables.');
+      }
+
+      // Remove id from data when creating (let database generate it)
+      const productData = product.toJSON();
+      delete productData.id;
+
       const { data: insertedData, error } = await supabase
         .from(PRODUCTS_TABLE)
-        .insert([product.toJSON()])
+        .insert([productData])
         .select()
         .single();
       
       if (error) {
         console.error('Error creating product:', error);
-        throw new Error(`Failed to create product: ${error.message}`);
+        // Provide more specific error messages
+        if (error.code === '42501') {
+          throw new Error('Permission denied. Please ensure you are logged in as admin.');
+        } else if (error.code === '23505') {
+          throw new Error('Product with this name already exists.');
+        } else {
+          throw new Error(`Database error: ${error.message}`);
+        }
       }
       
       return new Product(insertedData);

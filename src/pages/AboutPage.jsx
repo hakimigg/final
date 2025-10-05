@@ -17,7 +17,7 @@ export default function AboutPage() {
           >
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-emerald-700 via-teal-600 to-emerald-700 bg-clip-text text-transparent">
-                Our Story
+                Our Purpose
               </span>
             </h1>
           </motion.div>

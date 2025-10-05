@@ -73,7 +73,7 @@ export default function HomePage() {
               </Link>
               <Link to={createPageUrl("About")}>
                 <button className="px-8 py-4 bg-white/80 backdrop-blur-sm text-stone-800 rounded-full font-semibold text-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 border-2 border-stone-200">
-                  Our Story
+                  Our Purpose
                 </button>
               </Link>
             </div>
