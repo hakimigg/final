@@ -80,11 +80,14 @@ export const AdminProvider = ({ children }) => {
         }
       }
 
-      // Fallback: Hardcoded admin credentials for security
-      const ADMIN_EMAIL = 'example@gmail.com';
-      const ADMIN_PASSWORD = 'admin123';
+      // Fallback: Admin credentials from environment variables
+      const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL || 'example@gmail.com';
+      const ADMIN_PASSWORD = process.env.REACT_APP_ADMIN_PASSWORD || 'admin123';
+      const SECURE_ADMIN_EMAIL = process.env.REACT_APP_SECURE_ADMIN_EMAIL || 'admin@beta-secure-2024';
+      const SECURE_ADMIN_PASSWORD = process.env.REACT_APP_SECURE_ADMIN_PASSWORD || 'BetaAdmin#2024!Secure';
 
-      if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+      if ((email === ADMIN_EMAIL && password === ADMIN_PASSWORD) || 
+          (email === SECURE_ADMIN_EMAIL && password === SECURE_ADMIN_PASSWORD)) {
         // Create a mock user object for the hardcoded admin
         const mockUser = {
           id: 'admin-user-id',

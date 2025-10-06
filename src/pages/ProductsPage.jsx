@@ -1,16 +1,19 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Product } from "../entities/Product";
-import { Link } from "react-router-dom";
+import { Type } from "../entities/Type";
+import { Link, useSearchParams } from "react-router-dom";
 import { createPageUrl } from "../utils";
-import { Search, SlidersHorizontal, Home as HomeIcon } from "lucide-react";
+import { Search, SlidersHorizontal, Home as HomeIcon, X } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function ProductsPage() {
+  const [searchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
+  const [types, setTypes] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedType, setSelectedType] = useState("all");
   const [sortBy, setSortBy] = useState("-created_date");
 
   const loadProducts = useCallback(async () => {
@@ -25,6 +28,16 @@ export default function ProductsPage() {
     setIsLoading(false);
   }, [sortBy]);
 
+  const loadTypes = useCallback(async () => {
+    try {
+      const data = await Type.list('name');
+      setTypes(data);
+    } catch (error) {
+      console.error('Error loading types:', error);
+      setTypes([]);
+    }
+  }, []);
+
   const filterProducts = useCallback(() => {
     let filtered = [...products];
 
@@ -35,40 +48,117 @@ export default function ProductsPage() {
       );
     }
 
-    if (selectedCategory !== "all") {
-      filtered = filtered.filter(p => p.category === selectedCategory);
+
+    // Filter by type (match product category/name with type name)
+    if (selectedType !== "all") {
+      const selectedTypeName = selectedType.toLowerCase();
+      console.log('Filtering by type:', selectedTypeName); // Debug log
+      
+      filtered = filtered.filter(p => {
+        const productName = p.name?.toLowerCase() || '';
+        const productCategory = p.category?.toLowerCase() || '';
+        const productDescription = p.description?.toLowerCase() || '';
+        
+        // More precise matching - check if type name matches category or is contained in name/description
+        const matches = 
+          productCategory === selectedTypeName ||
+          productCategory.includes(selectedTypeName) ||
+          productName.includes(selectedTypeName) ||
+          productDescription.includes(selectedTypeName) ||
+          // Also check reverse - if category contains the type (e.g., "living_room" contains "furniture")
+          selectedTypeName.includes(productCategory.replace(/_/g, ' ')) ||
+          // Check if type matches common category mappings
+          (selectedTypeName === 'furniture' && ['living_room', 'bedroom', 'kitchen', 'office'].includes(productCategory)) ||
+          (selectedTypeName === 'lighting' && productCategory === 'lighting') ||
+          (selectedTypeName === 'decor' && productCategory === 'decor') ||
+          (selectedTypeName === 'storage' && productCategory === 'storage');
+          
+        console.log(`Product: ${p.name}, Category: ${productCategory}, Matches: ${matches}`); // Debug log
+        return matches;
+      });
+      
+      console.log(`Filtered ${filtered.length} products for type: ${selectedTypeName}`); // Debug log
     }
 
     setFilteredProducts(filtered);
-  }, [products, searchQuery, selectedCategory]);
+  }, [products, searchQuery, selectedType]);
 
   useEffect(() => {
     loadProducts();
-  }, [loadProducts]);
+    loadTypes();
+  }, [loadProducts, loadTypes]);
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const category = urlParams.get('category');
-    if (category) {
-      setSelectedCategory(category);
+    // Method 1: Try React Router's useSearchParams
+    const type = searchParams.get('type');
+    
+    console.log('React Router params - type:', type); // Debug log
+    
+    // Method 2: Manual URL parsing as fallback
+    const hash = window.location.hash;
+    const search = window.location.search;
+    const href = window.location.href;
+    
+    console.log('Full URL:', href); // Debug log
+    console.log('Hash:', hash); // Debug log  
+    console.log('Search:', search); // Debug log
+    
+    let fallbackType = null;
+    
+    // Try multiple approaches to get parameters
+    if (hash.includes('?')) {
+      const hashParts = hash.split('?');
+      const fallbackParams = new URLSearchParams(hashParts[1]);
+      fallbackType = fallbackParams.get('type');
+      console.log('Fallback hash params - type:', fallbackType); // Debug log
     }
+    
+    // Use React Router params first, then fallback
+    const finalType = type || fallbackType;
+    
+    console.log('Final params - type:', finalType); // Debug log
+    
+    if (finalType) {
+      console.log('Setting selected type to:', finalType); // Debug log
+      setSelectedType(finalType);
+    }
+  }, [searchParams]);
+
+  // Also listen for hash changes (when user navigates)
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      const hashParts = hash.split('?');
+      let urlParams = new URLSearchParams();
+      
+      if (hashParts.length > 1) {
+        urlParams = new URLSearchParams(hashParts[1]);
+      }
+      
+      const type = urlParams.get('type');
+      
+      console.log('Hash changed - type:', type); // Debug log
+      
+      if (type) {
+        setSelectedType(type);
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
+
+  const clearFilters = () => {
+    setSearchQuery("");
+    setSelectedType("all");
+    setSortBy("-created_date");
+    console.log('Filters cleared'); // Debug log
+  };
 
   useEffect(() => {
     filterProducts();
   }, [filterProducts]);
 
-  const categories = [
-    { label: "All Products", value: "all" },
-    { label: "Living Room", value: "living_room" },
-    { label: "Bedroom", value: "bedroom" },
-    { label: "Kitchen", value: "kitchen" },
-    { label: "Bathroom", value: "bathroom" },
-    { label: "Office", value: "office" },
-    { label: "Outdoor", value: "outdoor" },
-    { label: "Lighting", value: "lighting" },
-    { label: "Decor", value: "decor" }
-  ];
 
   return (
     <div className="min-h-screen py-12 px-6">
@@ -104,15 +194,17 @@ export default function ProductsPage() {
               />
             </div>
 
-            {/* Category Filter */}
+
+            {/* Type Filter */}
             <select 
-              value={selectedCategory} 
-              onChange={(e) => setSelectedCategory(e.target.value)}
+              value={selectedType} 
+              onChange={(e) => setSelectedType(e.target.value)}
               className="w-full md:w-48 h-12 rounded-full border-2 border-stone-200 bg-white px-4 outline-none focus:border-emerald-500"
             >
-              {categories.map(cat => (
-                <option key={cat.value} value={cat.value}>
-                  {cat.label}
+              <option value="all">All Types</option>
+              {types.map(type => (
+                <option key={type.id || type.name} value={type.name.toLowerCase()}>
+                  {type.name}
                 </option>
               ))}
             </select>
@@ -130,6 +222,19 @@ export default function ProductsPage() {
               <option value="name">Name: A-Z</option>
               <option value="-name">Name: Z-A</option>
             </select>
+
+            {/* Clear Filters Button */}
+            {(searchQuery || selectedType !== "all" || sortBy !== "-created_date") && (
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={clearFilters}
+                className="flex items-center space-x-2 px-6 py-3 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors h-12"
+              >
+                <X className="w-4 h-4" />
+                <span>Clear Filters</span>
+              </motion.button>
+            )}
           </div>
 
           {/* Active Filters */}
@@ -137,7 +242,7 @@ export default function ProductsPage() {
             <SlidersHorizontal className="w-4 h-4" />
             <span>
               Showing {filteredProducts.length} of {products.length} products
-              {selectedCategory !== "all" && ` in ${categories.find(c => c.value === selectedCategory)?.label}` }
+              {selectedType !== "all" && ` for ${types.find(t => t.name.toLowerCase() === selectedType)?.name || selectedType}` }
             </span>
           </div>
         </div>
@@ -161,10 +266,7 @@ export default function ProductsPage() {
             <h3 className="text-2xl font-bold text-stone-800 mb-2">No products found</h3>
             <p className="text-stone-600 mb-6">Try adjusting your filters or search query</p>
             <button
-              onClick={() => {
-                setSearchQuery("");
-                setSelectedCategory("all");
-              }}
+              onClick={clearFilters}
               className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-full px-6 py-3"
             >
               Clear Filters

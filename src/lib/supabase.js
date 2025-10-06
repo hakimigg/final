@@ -9,5 +9,6 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export { supabase };
 
-// Table name constant
+// Table name constants
 export const PRODUCTS_TABLE = 'products'
+export const TYPES_TABLE = 'types'

@@ -2,26 +2,68 @@ import React, { useState, useEffect } from "react";
 import { Product } from "../entities/Product";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
-import { ArrowLeft, Package, Truck, Shield, Phone, Mail, MessageCircle } from "lucide-react";
+import { ArrowLeft, Package, Phone, Mail, MessageCircle } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function ProductDetailPage() {
   const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     loadProduct();
   }, []);
 
   const loadProduct = async () => {
-    const urlParams = new URLSearchParams(window.location.search);
+    // For hash-based routing, get parameters from hash
+    const hash = window.location.hash;
+    const href = window.location.href;
+    
+    console.log('ProductDetail - Full URL:', href); // Debug log
+    console.log('ProductDetail - Hash:', hash); // Debug log
+    
+    let urlParams = new URLSearchParams();
+    
+    // Method 1: From hash after ?
+    if (hash.includes('?')) {
+      const hashParts = hash.split('?');
+      urlParams = new URLSearchParams(hashParts[1]);
+      console.log('ProductDetail - Hash params:', hashParts[1]); // Debug log
+    }
+    // Method 2: From regular search params as fallback
+    else if (window.location.search) {
+      urlParams = new URLSearchParams(window.location.search);
+      console.log('ProductDetail - Search params:', window.location.search); // Debug log
+    }
+    
     const id = urlParams.get('id');
+    console.log('ProductDetail - Product ID:', id); // Debug log
+    
     if (id) {
       try {
+        console.log('ProductDetail - Loading product with ID:', id); // Debug log
+        setLoading(true);
+        setError(null);
+        
         const data = await Product.get(id);
-        setProduct(data);
+        console.log('ProductDetail - Product loaded:', data); // Debug log
+        
+        if (data) {
+          setProduct(data);
+        } else {
+          console.error('ProductDetail - Product not found'); // Debug log
+          setError('Product not found');
+        }
       } catch (error) {
         console.error('Error loading product:', error);
+        setError(`Failed to load product: ${error.message}`);
+      } finally {
+        setLoading(false);
       }
+    } else {
+      console.error('ProductDetail - No product ID found in URL'); // Debug log
+      setError('No product ID provided');
+      setLoading(false);
     }
   };
 
@@ -40,10 +82,47 @@ export default function ProductDetailPage() {
     window.open(`https://wa.me/213555123456?text=${encodeURIComponent(message)}` , '_blank');
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-emerald-600 border-t-transparent mx-auto mb-4" />
+          <p className="text-slate-600">Loading product details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <Package className="w-16 h-16 text-slate-300 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-slate-900 mb-2">Product Not Found</h2>
+          <p className="text-slate-600 mb-6">{error}</p>
+          <Link to={createPageUrl("Products")}>
+            <button className="px-6 py-3 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-colors">
+              Back to Products
+            </button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   if (!product) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-emerald-600 border-t-transparent" />
+        <div className="text-center">
+          <Package className="w-16 h-16 text-slate-300 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-slate-900 mb-2">Product Not Available</h2>
+          <p className="text-slate-600 mb-6">This product is currently not available.</p>
+          <Link to={createPageUrl("Products")}>
+            <button className="px-6 py-3 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-colors">
+              Back to Products
+            </button>
+          </Link>
+        </div>
       </div>
     );
   }
@@ -146,24 +225,6 @@ export default function ProductDetailPage() {
               </div>
             </div>
 
-            {/* Features */}
-            <div className="grid grid-cols-3 gap-4 pt-6 border-t border-stone-200">
-              <div className="text-center">
-                <Truck className="w-8 h-8 mx-auto mb-2 text-emerald-600" />
-                <p className="text-sm font-medium text-stone-800">Fast Delivery</p>
-                <p className="text-xs text-stone-500">Available</p>
-              </div>
-              <div className="text-center">
-                <Shield className="w-8 h-8 mx-auto mb-2 text-emerald-600" />
-                <p className="text-sm font-medium text-stone-800">Quality</p>
-                <p className="text-xs text-stone-500">Guaranteed</p>
-              </div>
-              <div className="text-center">
-                <Package className="w-8 h-8 mx-auto mb-2 text-emerald-600" />
-                <p className="text-sm font-medium text-stone-800">Returns</p>
-                <p className="text-xs text-stone-500">Easy policy</p>
-              </div>
-            </div>
           </motion.div>
         </div>
       </div>

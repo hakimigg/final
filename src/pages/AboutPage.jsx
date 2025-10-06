@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import { Award, Users, Leaf } from "lucide-react";
 import { motion } from "framer-motion";
@@ -114,11 +115,11 @@ export default function AboutPage() {
             <p className="text-xl mb-8 opacity-90">
               Explore our collection and find pieces that speak to your style
             </p>
-            <a href={createPageUrl("Products")}>
+            <Link to={createPageUrl("Products")}>
               <button className="px-10 py-5 bg-white text-emerald-700 rounded-full font-bold text-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all">
                 Shop Our Collection
               </button>
-            </a>
+            </Link>
           </motion.div>
         </div>
       </section>

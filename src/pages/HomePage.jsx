@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Product } from "../entities/Product";
+import { Type } from "../entities/Type";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import { ArrowRight, Home as HomeIcon, Star } from "lucide-react";
@@ -8,13 +9,14 @@ import { motion } from "framer-motion";
 
 export default function HomePage() {
   const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [types, setTypes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [typesLoading, setTypesLoading] = useState(true);
 
   useEffect(() => {
     loadFeaturedProducts();
+    loadTypes();
   }, []);
-
 
   const loadFeaturedProducts = async () => {
     const products = await Product.filter({ featured: true }, "-created_date", 6);
@@ -22,15 +24,40 @@ export default function HomePage() {
     setIsLoading(false);
   };
 
+  const loadTypes = async () => {
+    try {
+      const data = await Type.list('name');
+      setTypes(data);
+    } catch (error) {
+      console.error('Error loading types:', error);
+      // Fallback to hardcoded categories if types fail to load
+      setTypes([
+        { name: "Living Room", color: "#10B981" },
+        { name: "Bedroom", color: "#EC4899" },
+        { name: "Kitchen", color: "#F97316" },
+        { name: "Lighting", color: "#F59E0B" },
+        { name: "Decor", color: "#8B5CF6" },
+        { name: "Outdoor", color: "#059669" }
+      ]);
+    } finally {
+      setTypesLoading(false);
+    }
+  };
 
-  const categories = [
-    { name: "Living Room", value: "living_room", color: "from-emerald-500 to-teal-600" },
-    { name: "Bedroom", value: "bedroom", color: "from-rose-500 to-pink-600" },
-    { name: "Kitchen", value: "kitchen", color: "from-amber-500 to-orange-600" },
-    { name: "Lighting", value: "lighting", color: "from-yellow-500 to-amber-600" },
-    { name: "Decor", value: "decor", color: "from-purple-500 to-indigo-600" },
-    { name: "Outdoor", value: "outdoor", color: "from-green-500 to-emerald-600" }
-  ];
+  // Convert hex color to gradient classes
+  const getGradientClass = (hexColor) => {
+    const colorMap = {
+      '#10B981': 'from-emerald-500 to-teal-600',
+      '#EC4899': 'from-rose-500 to-pink-600', 
+      '#F97316': 'from-amber-500 to-orange-600',
+      '#F59E0B': 'from-yellow-500 to-amber-600',
+      '#8B5CF6': 'from-purple-500 to-indigo-600',
+      '#059669': 'from-green-500 to-emerald-600',
+      '#EF4444': 'from-red-500 to-rose-600',
+      '#3B82F6': 'from-blue-500 to-indigo-600'
+    };
+    return colorMap[hexColor] || 'from-slate-500 to-slate-600';
+  };
 
 
   return (
@@ -93,33 +120,47 @@ export default function HomePage() {
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
               <span className="bg-gradient-to-r from-emerald-700 to-teal-600 bg-clip-text text-transparent">
-                Shop by Room
+                Shop by Type
               </span>
             </h2>
             <p className="text-lg text-stone-600">Find the perfect pieces for every space in your home</p>
           </motion.div>
 
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {categories.map((category, index) => (
-              <motion.div
-                key={category.value}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Link to={`${createPageUrl("Products")}?category=${category.value}` }>
-                  <div className={`group relative overflow-hidden rounded-2xl p-6 h-40 bg-gradient-to-br ${category.color} hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 cursor-pointer` }>
-                    <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors" />
-                    <div className="relative z-10 h-full flex flex-col items-center justify-center text-white">
-                      <span className="font-bold text-lg">{category.name}</span>
+          {typesLoading ? (
+            <div className="text-center py-12">
+              <div className="w-8 h-8 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+              <p className="text-slate-600">Loading types...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {types.map((type, index) => (
+                <motion.div
+                  key={type.id || type.name}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <Link to={`${createPageUrl("Products")}?type=${encodeURIComponent(type.name.toLowerCase())}`}>
+                    <div className={`group relative overflow-hidden rounded-2xl h-40 ${type.image_url ? 'bg-black' : `bg-gradient-to-br ${getGradientClass(type.color)}`} hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 cursor-pointer`}>
+                      {type.image_url && (
+                        <img
+                          src={type.image_url}
+                          alt={type.name}
+                          className="absolute inset-0 w-full h-full object-cover"
+                        />
+                      )}
+                      <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors" />
+                      <div className="relative z-10 h-full flex flex-col items-center justify-center text-white p-6">
+                        <span className="font-bold text-lg text-center">{type.name}</span>
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
