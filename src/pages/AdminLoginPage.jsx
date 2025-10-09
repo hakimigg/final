@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAdmin } from '../contexts/AdminContext';
 import { motion } from 'framer-motion';
 import { Lock, Mail, Eye, EyeOff, Shield } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState('');
@@ -9,20 +10,31 @@ export default function AdminLoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const { login } = useAdmin();
+  const { login, isAuthenticated } = useAdmin();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/x9pL2mN8qR5tY7vZ');
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
 
-    const result = await login(email, password);
-    
-    if (!result.success) {
-      setError(result.error);
+    try {
+      const result = await login(email, password);
+      if (!result.success) {
+        setError(result.error);
+      }
+    } catch (err) {
+      setError('An error occurred during login');
+      console.error('Login error:', err);
+    } finally {
+      setIsLoading(false);
     }
-    
-    setIsLoading(false);
   };
 
   return (
