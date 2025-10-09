@@ -8,7 +8,7 @@ import { Package } from "lucide-react";
 export default function AboutPage() {
   return (
     <div className="min-h-screen">
-      {/* Hero */}
+      {}
       <section className="relative py-20 px-6 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-100 via-amber-50 to-rose-100 opacity-50" />
         <div className="relative max-w-4xl mx-auto text-center">
@@ -25,7 +25,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Mission */}
+      {}
       <section className="py-20 px-6 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -48,7 +48,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Values */}
+      {}
       <section className="py-20 px-6 bg-gradient-to-br from-stone-50 to-amber-50">
         <div className="max-w-6xl mx-auto">
           <motion.div
@@ -101,7 +101,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* CTA */}
+      {}
       <section className="py-20 px-6 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600">
         <div className="max-w-4xl mx-auto text-center text-white">
           <motion.div

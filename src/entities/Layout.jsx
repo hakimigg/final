@@ -55,11 +55,11 @@ export default function Layout({ children, currentPageName }) {
       `}</style>
 
 
-      {/* Header */}
+      {}
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-stone-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            {/* Logo */}
+            {}
             <Link to={createPageUrl("Home")} className="flex items-center gap-3 group">
               <div className="w-10 h-10 bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-lg flex items-center justify-center transform group-hover:rotate-12 transition-transform duration-300">
                 <Home className="w-5 h-5 text-white" />
@@ -71,7 +71,7 @@ export default function Layout({ children, currentPageName }) {
             </Link>
 
 
-            {/* Navigation */}
+            {}
             <nav className="hidden md:flex items-center gap-8">
               <Link 
                 to={createPageUrl("Home")} 
@@ -95,7 +95,7 @@ export default function Layout({ children, currentPageName }) {
           </div>
 
 
-          {/* Mobile Navigation */}
+          {}
           <div className="md:hidden flex justify-center gap-6 mt-4 pt-4 border-t border-stone-200">
             <Link 
               to={createPageUrl("Home")} 
@@ -123,13 +123,13 @@ export default function Layout({ children, currentPageName }) {
       </header>
 
 
-      {/* Main Content */}
+      {}
       <main className="min-h-screen">
         {children}
       </main>
 
 
-      {/* Footer */}
+      {}
       <footer className="bg-gradient-to-r from-stone-900 via-emerald-900 to-stone-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-3 gap-8">

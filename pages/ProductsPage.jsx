@@ -88,7 +88,7 @@ export default function ProductsPage() {
   return (
     <div className="min-h-screen py-12 px-6">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+        {}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -106,10 +106,10 @@ export default function ProductsPage() {
         </motion.div>
 
 
-        {/* Filters */}
+        {}
         <div className="mb-8 space-y-4">
           <div className="flex flex-col md:flex-row gap-4">
-            {/* Search */}
+            {}
             <div className="relative flex-1">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-stone-400 w-5 h-5" />
               <Input
@@ -121,7 +121,7 @@ export default function ProductsPage() {
             </div>
 
 
-            {/* Category Filter */}
+            {}
             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
               <SelectTrigger className="w-full md:w-48 h-12 rounded-full border-2 border-stone-200 bg-white">
                 <SelectValue placeholder="Category" />
@@ -136,7 +136,7 @@ export default function ProductsPage() {
             </Select>
 
 
-            {/* Sort */}
+            {}
             <Select value={sortBy} onValueChange={setSortBy}>
               <SelectTrigger className="w-full md:w-48 h-12 rounded-full border-2 border-stone-200 bg-white">
                 <SelectValue placeholder="Sort by" />
@@ -153,7 +153,7 @@ export default function ProductsPage() {
           </div>
 
 
-          {/* Active Filters */}
+          {}
           <div className="flex items-center gap-2 text-sm text-stone-600">
             <SlidersHorizontal className="w-4 h-4" />
             <span>
@@ -164,7 +164,7 @@ export default function ProductsPage() {
         </div>
 
 
-        {/* Products Grid */}
+        {}
         {isLoading ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {[...Array(8)].map((_, i) => (

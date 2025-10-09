@@ -15,43 +15,43 @@ export default function ProductDetailPage() {
   }, []);
 
   const loadProduct = async () => {
-    // For hash-based routing, get parameters from hash
+    
     const hash = window.location.hash;
     const href = window.location.href;
     
-    console.log('ProductDetail - Full URL:', href); // Debug log
-    console.log('ProductDetail - Hash:', hash); // Debug log
+    console.log('ProductDetail - Full URL:', href); 
+    console.log('ProductDetail - Hash:', hash); 
     
     let urlParams = new URLSearchParams();
     
-    // Method 1: From hash after ?
+    
     if (hash.includes('?')) {
       const hashParts = hash.split('?');
       urlParams = new URLSearchParams(hashParts[1]);
-      console.log('ProductDetail - Hash params:', hashParts[1]); // Debug log
+      console.log('ProductDetail - Hash params:', hashParts[1]); 
     }
-    // Method 2: From regular search params as fallback
+    
     else if (window.location.search) {
       urlParams = new URLSearchParams(window.location.search);
-      console.log('ProductDetail - Search params:', window.location.search); // Debug log
+      console.log('ProductDetail - Search params:', window.location.search); 
     }
     
     const id = urlParams.get('id');
-    console.log('ProductDetail - Product ID:', id); // Debug log
+    console.log('ProductDetail - Product ID:', id); 
     
     if (id) {
       try {
-        console.log('ProductDetail - Loading product with ID:', id); // Debug log
+        console.log('ProductDetail - Loading product with ID:', id); 
         setLoading(true);
         setError(null);
         
         const data = await Product.get(id);
-        console.log('ProductDetail - Product loaded:', data); // Debug log
+        console.log('ProductDetail - Product loaded:', data); 
         
         if (data) {
           setProduct(data);
         } else {
-          console.error('ProductDetail - Product not found'); // Debug log
+          console.error('ProductDetail - Product not found'); 
           setError('Product not found');
         }
       } catch (error) {
@@ -61,7 +61,7 @@ export default function ProductDetailPage() {
         setLoading(false);
       }
     } else {
-      console.error('ProductDetail - No product ID found in URL'); // Debug log
+      console.error('ProductDetail - No product ID found in URL'); 
       setError('No product ID provided');
       setLoading(false);
     }
@@ -138,7 +138,7 @@ export default function ProductDetailPage() {
         </Link>
 
         <div className="grid lg:grid-cols-2 gap-12">
-          {/* Images */}
+          {}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -169,7 +169,7 @@ export default function ProductDetailPage() {
             )}
           </motion.div>
 
-          {/* Details */}
+          {}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -194,7 +194,7 @@ export default function ProductDetailPage() {
 
 
 
-            {/* Contact Section */}
+            {}
             <div className="border-t border-stone-200 pt-6 space-y-4">
               <h3 className="text-xl font-bold text-stone-800 mb-4">Contact us to purchase:</h3>
               

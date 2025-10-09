@@ -38,7 +38,7 @@ export default function AdminLoginPage() {
         className="relative z-10 w-full max-w-md"
       >
         <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20">
-          {/* Header */}
+          {}
           <div className="text-center mb-8">
             <motion.div
               initial={{ scale: 0 }}
@@ -54,7 +54,7 @@ export default function AdminLoginPage() {
             </p>
           </div>
 
-          {/* Error Message */}
+          {}
           {error && (
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -66,9 +66,9 @@ export default function AdminLoginPage() {
           )}
 
 
-          {/* Form */}
+          {}
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Email Field */}
+            {}
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-2">
                 Email Address
@@ -86,7 +86,7 @@ export default function AdminLoginPage() {
               </div>
             </div>
 
-            {/* Password Field */}
+            {}
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-2">
                 Password
@@ -112,7 +112,7 @@ export default function AdminLoginPage() {
             </div>
 
 
-            {/* Submit Button */}
+            {}
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -131,7 +131,7 @@ export default function AdminLoginPage() {
             </motion.button>
           </form>
 
-          {/* Footer */}
+          {}
           <div className="mt-8 text-center">
             <p className="text-slate-400 text-sm">
               🔒 Secure Admin Portal - Beta Website

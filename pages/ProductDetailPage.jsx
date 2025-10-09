@@ -80,7 +80,7 @@ export default function ProductDetailPage() {
 
 
         <div className="grid lg:grid-cols-2 gap-12">
-          {/* Images */}
+          {}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -113,7 +113,7 @@ export default function ProductDetailPage() {
           </motion.div>
 
 
-          {/* Details */}
+          {}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -141,7 +141,7 @@ export default function ProductDetailPage() {
 
 
 
-            {/* Contact Section */}
+            {}
             <div className="border-t border-stone-200 pt-6 space-y-4">
               <h3 className="text-xl font-bold text-stone-800 mb-4">Contact us to purchase:</h3>
               
@@ -191,7 +191,7 @@ export default function ProductDetailPage() {
             </div>
 
 
-            {/* Features */}
+            {}
             <div className="grid grid-cols-3 gap-4 pt-6 border-t border-stone-200">
               <div className="text-center">
                 <Truck className="w-8 h-8 mx-auto mb-2 text-emerald-600" />

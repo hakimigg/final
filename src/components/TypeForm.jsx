@@ -14,7 +14,7 @@ export default function TypeForm({ type, onClose, onSave }) {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
-  // Predefined color options
+ 
   const colorOptions = [
     { name: 'Purple', value: '#8B5CF6' },
     { name: 'Blue', value: '#3B82F6' },
@@ -69,10 +69,10 @@ export default function TypeForm({ type, onClose, onSave }) {
 
     try {
       if (type) {
-        // Update existing type
+        
         await Type.update(type.id, formData);
       } else {
-        // Create new type
+        
         await Type.create(formData);
       }
 
@@ -91,7 +91,7 @@ export default function TypeForm({ type, onClose, onSave }) {
       [field]: value
     }));
     
-    // Clear error when user starts typing
+    
     if (errors[field]) {
       setErrors(prev => ({
         ...prev,
@@ -116,7 +116,7 @@ export default function TypeForm({ type, onClose, onSave }) {
           exit={{ opacity: 0, scale: 0.95 }}
           className="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col"
         >
-          {/* Header */}
+          {}
           <div className="flex items-center justify-between p-6 border-b border-slate-200">
             <h2 className="text-2xl font-bold text-slate-900">
               {type ? 'Edit Type' : 'Add New Type'}
@@ -129,7 +129,7 @@ export default function TypeForm({ type, onClose, onSave }) {
             </button>
           </div>
 
-          {/* Form */}
+          {}
           <form onSubmit={handleSubmit} className="p-6 overflow-y-auto flex-1">
             {errors.submit && (
               <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">
@@ -138,7 +138,7 @@ export default function TypeForm({ type, onClose, onSave }) {
             )}
 
             <div className="space-y-6">
-              {/* Type Name */}
+              {}
               <div>
                 <label className="block text-sm font-semibold text-slate-900 mb-2">
                   Type Name *
@@ -158,7 +158,7 @@ export default function TypeForm({ type, onClose, onSave }) {
                 )}
               </div>
 
-              {/* Description */}
+              {}
               <div>
                 <label className="block text-sm font-semibold text-slate-900 mb-2">
                   Description (Optional)
@@ -172,7 +172,7 @@ export default function TypeForm({ type, onClose, onSave }) {
                 />
               </div>
 
-              {/* Color Selection */}
+              {}
               <div>
                 <label className="block text-sm font-semibold text-slate-900 mb-3">
                   <Palette className="w-4 h-4 inline mr-2" />
@@ -195,7 +195,7 @@ export default function TypeForm({ type, onClose, onSave }) {
                   ))}
                 </div>
                 
-                {/* Custom Color Input */}
+                {}
                 <div className="mt-3">
                   <input
                     type="color"
@@ -211,7 +211,7 @@ export default function TypeForm({ type, onClose, onSave }) {
                 )}
               </div>
 
-              {/* Image Upload */}
+              {}
               <ImageUpload
                 currentImage={formData.image_url}
                 onImageUploaded={handleImageUpload}
@@ -219,7 +219,7 @@ export default function TypeForm({ type, onClose, onSave }) {
                 label="Type Image (Optional)"
               />
 
-              {/* Preview */}
+              {}
               <div className="p-4 bg-slate-50 rounded-xl">
                 <p className="text-sm font-semibold text-slate-900 mb-2">Preview:</p>
                 <div className="flex items-center space-x-3">
@@ -245,7 +245,7 @@ export default function TypeForm({ type, onClose, onSave }) {
             </div>
           </form>
 
-          {/* Footer */}
+          {}
           <div className="flex items-center justify-end space-x-4 p-6 border-t border-slate-200 bg-slate-50 flex-shrink-0">
             <button
               type="button"

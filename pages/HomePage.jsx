@@ -35,7 +35,7 @@ export default function HomePage() {
 
   return (
     <div className="pb-20">
-      {/* Hero Section */}
+      {}
       <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute inset-0" style={{
@@ -82,7 +82,7 @@ export default function HomePage() {
       </section>
 
 
-      {/* Categories */}
+      {}
       <section className="py-20 px-6">
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -124,7 +124,7 @@ export default function HomePage() {
       </section>
 
 
-      {/* Featured Products */}
+      {}
       <section className="py-20 px-6 bg-white/50 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto">
           <motion.div

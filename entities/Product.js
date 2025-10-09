@@ -1,9 +1,5 @@
 import { supabase, PRODUCTS_TABLE } from '@/lib/supabase';
 
-/**
- * Product Entity
- * Represents furniture and decor products in the e-commerce system
- */
 export class Product {
   constructor(data = {}) {
     this.id = data.id || null;
@@ -17,10 +13,6 @@ export class Product {
     this.created_date = data.created_date || new Date().toISOString();
   }
 
-  /**
-   * Validate product data
-   * @returns {Object} Validation result with isValid and errors
-   */
   validate() {
     const errors = [];
     
@@ -47,10 +39,6 @@ export class Product {
     };
   }
 
-  /**
-   * Convert to plain object
-   * @returns {Object} Plain object representation
-   */
   toJSON() {
     return {
       id: this.id,
@@ -65,43 +53,22 @@ export class Product {
     };
   }
 
-  /**
-   * Get formatted price with currency
-   * @returns {string} Formatted price
-   */
   getFormattedPrice() {
     return `${this.price} DA`;
   }
 
-  /**
-   * Get category display name
-   * @returns {string} Human-readable category name
-   */
   getCategoryDisplayName() {
     return this.category.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
   }
 
-  /**
-   * Check if product has gallery images
-   * @returns {boolean} True if gallery images exist
-   */
   hasGalleryImages() {
     return this.gallery_images && this.gallery_images.length > 0;
   }
 
-
-  // Static methods for data operations (Supabase implementation)
-  
-  /**
-   * Get all products with optional sorting
-   * @param {string} sortBy - Sort field (e.g., 'name', '-price', 'created_date')
-   * @returns {Promise<Product[]>} Array of products
-   */
   static async list(sortBy = '-created_date') {
     try {
       let query = supabase.from(PRODUCTS_TABLE).select('*');
       
-      // Handle sorting
       const sortField = sortBy.startsWith('-') ? sortBy.slice(1) : sortBy;
       const ascending = !sortBy.startsWith('-');
       
@@ -121,28 +88,18 @@ export class Product {
     }
   }
 
-  /**
-   * Get products with filters
-   * @param {Object} filters - Filter criteria
-   * @param {string} sortBy - Sort field
-   * @param {number} limit - Maximum number of results
-   * @returns {Promise<Product[]>} Filtered products
-   */
   static async filter(filters = {}, sortBy = '-created_date', limit = null) {
     try {
       let query = supabase.from(PRODUCTS_TABLE).select('*');
       
-      // Apply filters
       for (const [key, value] of Object.entries(filters)) {
         query = query.eq(key, value);
       }
       
-      // Handle sorting
       const sortField = sortBy.startsWith('-') ? sortBy.slice(1) : sortBy;
       const ascending = !sortBy.startsWith('-');
       query = query.order(sortField, { ascending });
       
-      // Apply limit
       if (limit) {
         query = query.limit(limit);
       }
@@ -161,11 +118,6 @@ export class Product {
     }
   }
 
-  /**
-   * Get single product by ID
-   * @param {string} id - Product ID
-   * @returns {Promise<Product|null>} Product or null if not found
-   */
   static async get(id) {
     try {
       const { data, error } = await supabase
@@ -176,7 +128,6 @@ export class Product {
       
       if (error) {
         if (error.code === 'PGRST116') {
-          // No rows returned
           return null;
         }
         console.error('Error fetching product:', error);
@@ -190,11 +141,7 @@ export class Product {
     }
   }
 
-  /**
-   * Create new product
-   * @param {Object} data - Product data
-   * @returns {Promise<Product>} Created product
-   */
+  
   static async create(data) {
     const product = new Product({
       ...data,
@@ -225,21 +172,16 @@ export class Product {
     }
   }
 
-  /**
-   * Update existing product
-   * @param {string} id - Product ID
-   * @param {Object} data - Updated data
-   * @returns {Promise<Product|null>} Updated product or null if not found
-   */
+  
   static async update(id, data) {
     try {
-      // First check if product exists
+     
       const existingProduct = await this.get(id);
       if (!existingProduct) {
         return null;
       }
       
-      // Update properties
+     
       Object.assign(existingProduct, data);
       
       const validation = existingProduct.validate();
@@ -266,11 +208,7 @@ export class Product {
     }
   }
 
-  /**
-   * Delete product
-   * @param {string} id - Product ID
-   * @returns {Promise<boolean>} True if deleted successfully
-   */
+  
   static async delete(id) {
     try {
       const { error } = await supabase
