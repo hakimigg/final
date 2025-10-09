@@ -50,7 +50,7 @@ function App() {
             } />
             
             {}
-            <Route path="/beta-secure-admin-portal-2024" element={
+            <Route path="/x9pL2mN8qR5tY7vZ" element={
               <AdminRoute>
                 <AdminDashboard />
               </AdminRoute>
