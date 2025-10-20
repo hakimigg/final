@@ -70,7 +70,7 @@ export default function AboutPage() {
                 icon: Leaf,
                 color: "from-green-500 to-emerald-600",
                 title: "Sustainability",
-                desc: "Committed to eco-friendly practices"
+                desc: "Mindful design with environmental responsibility"
               },
               {
                 icon: Users,
