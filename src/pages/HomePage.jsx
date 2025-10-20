@@ -30,7 +30,6 @@ export default function HomePage() {
       setTypes(data);
     } catch (error) {
       console.error('Error loading types:', error);
-      // Fallback to hardcoded categories if types fail to load
       setTypes([
         { name: "Living Room", color: "#10B981" },
         { name: "Bedroom", color: "#EC4899" },
@@ -44,7 +43,6 @@ export default function HomePage() {
     }
   };
 
-  // Convert hex color to gradient classes
   const getGradientClass = (hexColor) => {
     const colorMap = {
       '#10B981': 'from-emerald-500 to-teal-600',
@@ -62,7 +60,6 @@ export default function HomePage() {
 
   return (
     <div className="pb-20">
-      {/* Hero Section */}
       <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-amber-50 to-rose-100">
           <div className="absolute inset-0" style={{
@@ -109,7 +106,6 @@ export default function HomePage() {
       </section>
 
 
-      {/* Categories */}
       <section className="py-20 px-6">
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -165,7 +161,6 @@ export default function HomePage() {
       </section>
 
 
-      {/* Featured Products */}
       <section className="py-20 px-6 bg-white/50 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto">
           <motion.div

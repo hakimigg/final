@@ -1,9 +1,5 @@
 import { supabase, TYPES_TABLE } from '../lib/supabase';
 
-/**
- * Type Entity
- * Represents product types/categories in the system
- */
 export class Type {
   constructor(data = {}) {
     this.id = data.id || null;
@@ -14,10 +10,6 @@ export class Type {
     this.created_date = data.created_date || new Date().toISOString();
   }
 
-  /**
-   * Validate type data
-   * @returns {Object} Validation result with isValid and errors
-   */
   validate() {
     const errors = [];
     
@@ -29,7 +21,6 @@ export class Type {
       errors.push('Type name must be 50 characters or less');
     }
     
-    // Validate color format (hex)
     if (this.color && !/^#[0-9A-F]{6}$/i.test(this.color)) {
       errors.push('Color must be a valid hex color (e.g., #FF0000)');
     }
@@ -40,10 +31,6 @@ export class Type {
     };
   }
 
-  /**
-   * Convert to plain object
-   * @returns {Object} Plain object representation
-   */
   toJSON() {
     return {
       id: this.id,
@@ -55,23 +42,15 @@ export class Type {
     };
   }
 
-  // Static methods for data operations
 
-  /**
-   * Get all types with optional sorting
-   * @param {string} sortBy - Sort field (e.g., 'name', '-created_date')
-   * @returns {Promise<Type[]>} Array of types
-   */
   static async list(sortBy = 'name') {
     try {
-      // Fallback to mock data if Supabase is not configured
       if (!supabase || process.env.REACT_APP_SUPABASE_URL === 'YOUR_SUPABASE_URL') {
         return this.getMockData(sortBy);
       }
 
       let query = supabase.from(TYPES_TABLE).select('*');
       
-      // Handle sorting
       const sortField = sortBy.startsWith('-') ? sortBy.slice(1) : sortBy;
       const ascending = !sortBy.startsWith('-');
       
@@ -123,7 +102,6 @@ export class Type {
       })
     ];
 
-    // Simple sorting implementation
     const sortField = sortBy.startsWith('-') ? sortBy.slice(1) : sortBy;
     const sortOrder = sortBy.startsWith('-') ? -1 : 1;
     
@@ -142,14 +120,8 @@ export class Type {
     });
   }
 
-  /**
-   * Get single type by ID
-   * @param {string} id - Type ID
-   * @returns {Promise<Type|null>} Type or null if not found
-   */
   static async get(id) {
     try {
-      // Fallback to mock data if Supabase is not configured
       if (!supabase || process.env.REACT_APP_SUPABASE_URL === 'YOUR_SUPABASE_URL') {
         const allTypes = this.getMockData();
         return allTypes.find(type => type.id === id) || null;
@@ -178,11 +150,6 @@ export class Type {
     }
   }
 
-  /**
-   * Create new type
-   * @param {Object} data - Type data
-   * @returns {Promise<Type>} Created type
-   */
   static async create(data) {
     const type = new Type({
       ...data,
@@ -195,12 +162,10 @@ export class Type {
     }
     
     try {
-      // Check if Supabase is configured
       if (!supabase || process.env.REACT_APP_SUPABASE_URL === 'YOUR_SUPABASE_URL') {
         throw new Error('Supabase not configured. Please check your environment variables.');
       }
 
-      // Remove id from data when creating (let database generate it)
       const typeData = type.toJSON();
       delete typeData.id;
 
@@ -212,7 +177,6 @@ export class Type {
       
       if (error) {
         console.error('Error creating type:', error);
-        // Provide more specific error messages
         if (error.code === '42501') {
           throw new Error('Permission denied. Please ensure you are logged in as admin.');
         } else if (error.code === '23505') {
@@ -229,21 +193,13 @@ export class Type {
     }
   }
 
-  /**
-   * Update existing type
-   * @param {string} id - Type ID
-   * @param {Object} data - Updated data
-   * @returns {Promise<Type|null>} Updated type or null if not found
-   */
   static async update(id, data) {
     try {
-      // First check if type exists
       const existingType = await this.get(id);
       if (!existingType) {
         return null;
       }
       
-      // Update properties
       Object.assign(existingType, data);
       
       const validation = existingType.validate();
@@ -270,11 +226,6 @@ export class Type {
     }
   }
 
-  /**
-   * Delete type
-   * @param {string} id - Type ID
-   * @returns {Promise<boolean>} True if deleted successfully
-   */
   static async delete(id) {
     try {
       const { error } = await supabase

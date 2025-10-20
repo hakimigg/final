@@ -16,7 +16,6 @@ code {
     monospace;
 }
 
-/* Custom utility classes */
 .line-clamp-1 {
   overflow: hidden;
   display: -webkit-box;

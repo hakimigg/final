@@ -49,35 +49,28 @@ export default function ProductsPage() {
     }
 
 
-    // Filter by type (match product category/name with type name)
     if (selectedType !== "all") {
       const selectedTypeName = selectedType.toLowerCase();
-      console.log('Filtering by type:', selectedTypeName); // Debug log
       
       filtered = filtered.filter(p => {
         const productName = p.name?.toLowerCase() || '';
         const productCategory = p.category?.toLowerCase() || '';
         const productDescription = p.description?.toLowerCase() || '';
         
-        // More precise matching - check if type name matches category or is contained in name/description
         const matches = 
           productCategory === selectedTypeName ||
           productCategory.includes(selectedTypeName) ||
           productName.includes(selectedTypeName) ||
           productDescription.includes(selectedTypeName) ||
-          // Also check reverse - if category contains the type (e.g., "living_room" contains "furniture")
           selectedTypeName.includes(productCategory.replace(/_/g, ' ')) ||
-          // Check if type matches common category mappings
           (selectedTypeName === 'furniture' && ['living_room', 'bedroom', 'kitchen', 'office'].includes(productCategory)) ||
           (selectedTypeName === 'lighting' && productCategory === 'lighting') ||
           (selectedTypeName === 'decor' && productCategory === 'decor') ||
           (selectedTypeName === 'storage' && productCategory === 'storage');
           
-        console.log(`Product: ${p.name}, Category: ${productCategory}, Matches: ${matches}`); // Debug log
         return matches;
       });
       
-      console.log(`Filtered ${filtered.length} products for type: ${selectedTypeName}`); // Debug log
     }
 
     setFilteredProducts(filtered);
@@ -89,42 +82,28 @@ export default function ProductsPage() {
   }, [loadProducts, loadTypes]);
 
   useEffect(() => {
-    // Method 1: Try React Router's useSearchParams
     const type = searchParams.get('type');
     
-    console.log('React Router params - type:', type); // Debug log
     
-    // Method 2: Manual URL parsing as fallback
     const hash = window.location.hash;
-    const search = window.location.search;
-    const href = window.location.href;
     
-    console.log('Full URL:', href); // Debug log
-    console.log('Hash:', hash); // Debug log  
-    console.log('Search:', search); // Debug log
     
     let fallbackType = null;
     
-    // Try multiple approaches to get parameters
     if (hash.includes('?')) {
       const hashParts = hash.split('?');
       const fallbackParams = new URLSearchParams(hashParts[1]);
       fallbackType = fallbackParams.get('type');
-      console.log('Fallback hash params - type:', fallbackType); // Debug log
     }
     
-    // Use React Router params first, then fallback
     const finalType = type || fallbackType;
     
-    console.log('Final params - type:', finalType); // Debug log
     
     if (finalType) {
-      console.log('Setting selected type to:', finalType); // Debug log
       setSelectedType(finalType);
     }
   }, [searchParams]);
 
-  // Also listen for hash changes (when user navigates)
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash;
@@ -137,7 +116,6 @@ export default function ProductsPage() {
       
       const type = urlParams.get('type');
       
-      console.log('Hash changed - type:', type); // Debug log
       
       if (type) {
         setSelectedType(type);
@@ -152,7 +130,6 @@ export default function ProductsPage() {
     setSearchQuery("");
     setSelectedType("all");
     setSortBy("-created_date");
-    console.log('Filters cleared'); // Debug log
   };
 
   useEffect(() => {
@@ -163,7 +140,6 @@ export default function ProductsPage() {
   return (
     <div className="min-h-screen py-12 px-6">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -180,10 +156,8 @@ export default function ProductsPage() {
           <p className="text-lg text-stone-600">Explore our beta collection and discover pieces that speak to your style</p>
         </motion.div>
 
-        {/* Filters */}
         <div className="mb-8 space-y-4">
           <div className="flex flex-col md:flex-row gap-4">
-            {/* Search */}
             <div className="relative flex-1">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-stone-400 w-5 h-5" />
               <input
@@ -195,7 +169,6 @@ export default function ProductsPage() {
             </div>
 
 
-            {/* Type Filter */}
             <select 
               value={selectedType} 
               onChange={(e) => setSelectedType(e.target.value)}
@@ -209,7 +182,6 @@ export default function ProductsPage() {
               ))}
             </select>
 
-            {/* Sort */}
             <select 
               value={sortBy} 
               onChange={(e) => setSortBy(e.target.value)}
@@ -223,7 +195,6 @@ export default function ProductsPage() {
               <option value="-name">Name: Z-A</option>
             </select>
 
-            {/* Clear Filters Button */}
             {(searchQuery || selectedType !== "all" || sortBy !== "-created_date") && (
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -237,7 +208,6 @@ export default function ProductsPage() {
             )}
           </div>
 
-          {/* Active Filters */}
           <div className="flex items-center gap-2 text-sm text-stone-600">
             <SlidersHorizontal className="w-4 h-4" />
             <span>
@@ -247,7 +217,6 @@ export default function ProductsPage() {
           </div>
         </div>
 
-        {/* Products Grid */}
         {isLoading ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {[...Array(8)].map((_, i) => (

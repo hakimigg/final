@@ -55,7 +55,6 @@ export default function ProductForm({ product, onClose, onSave }) {
       newErrors.price = 'Valid price is required';
     }
 
-    // Image URL is now optional
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -77,10 +76,8 @@ export default function ProductForm({ product, onClose, onSave }) {
       };
 
       if (product) {
-        // Update existing product
         await Product.update(product.id, productData);
       } else {
-        // Create new product
         await Product.create(productData);
       }
 
@@ -99,7 +96,6 @@ export default function ProductForm({ product, onClose, onSave }) {
       [field]: value
     }));
     
-    // Clear error when user starts typing
     if (errors[field]) {
       setErrors(prev => ({
         ...prev,
@@ -114,7 +110,6 @@ export default function ProductForm({ product, onClose, onSave }) {
       image_url: url
     }));
     
-    // Clear error when image is uploaded
     if (errors.image_url) {
       setErrors(prev => ({
         ...prev,
@@ -139,7 +134,6 @@ export default function ProductForm({ product, onClose, onSave }) {
           exit={{ opacity: 0, scale: 0.95 }}
           className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden"
         >
-          {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-slate-200">
             <h2 className="text-2xl font-bold text-slate-900">
               {product ? 'Edit Product' : 'Add New Product'}
@@ -152,7 +146,6 @@ export default function ProductForm({ product, onClose, onSave }) {
             </button>
           </div>
 
-          {/* Form */}
           <form onSubmit={handleSubmit} className="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
             {errors.submit && (
               <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">
@@ -161,7 +154,6 @@ export default function ProductForm({ product, onClose, onSave }) {
             )}
 
             <div className="space-y-6">
-              {/* Product Name */}
               <div>
                 <label className="block text-sm font-semibold text-slate-900 mb-2">
                   Product Name *
@@ -180,7 +172,6 @@ export default function ProductForm({ product, onClose, onSave }) {
                 )}
               </div>
 
-              {/* Description */}
               <div>
                 <label className="block text-sm font-semibold text-slate-900 mb-2">
                   Description *
@@ -199,7 +190,6 @@ export default function ProductForm({ product, onClose, onSave }) {
                 )}
               </div>
 
-              {/* Price and Category */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-semibold text-slate-900 mb-2">
@@ -239,7 +229,6 @@ export default function ProductForm({ product, onClose, onSave }) {
                 </div>
               </div>
 
-              {/* Main Image Upload */}
               <ImageUpload
                 currentImage={formData.image_url}
                 onImageUploaded={handleMainImageUpload}
@@ -250,7 +239,6 @@ export default function ProductForm({ product, onClose, onSave }) {
                 <p className="mt-1 text-sm text-red-600">{errors.image_url}</p>
               )}
 
-              {/* Gallery Images Upload */}
               <MultiImageUpload
                 currentImages={formData.gallery_images}
                 onImagesUploaded={handleGalleryImagesUpload}
@@ -259,7 +247,6 @@ export default function ProductForm({ product, onClose, onSave }) {
                 label="Gallery Images (Optional)"
               />
 
-              {/* Featured Toggle */}
               <div className="flex items-center space-x-3">
                 <input
                   type="checkbox"
@@ -275,7 +262,6 @@ export default function ProductForm({ product, onClose, onSave }) {
             </div>
           </form>
 
-          {/* Footer */}
           <div className="flex items-center justify-end space-x-4 p-6 border-t border-slate-200 bg-slate-50">
             <button
               type="button"

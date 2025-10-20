@@ -17,7 +17,6 @@ export const AdminProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Check if user is already logged in
     const checkAuth = async () => {
       try {
         if (!supabase) {
@@ -40,7 +39,6 @@ export const AdminProvider = ({ children }) => {
 
     checkAuth();
 
-    // Listen for auth changes
     if (supabase) {
       const { data: { subscription } } = supabase.auth.onAuthStateChange(
         async (event, session) => {
@@ -63,7 +61,6 @@ export const AdminProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      // First try Supabase authentication
       if (supabase) {
         const { data, error } = await supabase.auth.signInWithPassword({
           email,
@@ -72,7 +69,6 @@ export const AdminProvider = ({ children }) => {
 
         if (error) {
           console.error('Supabase auth error:', error);
-          // Fall back to hardcoded credentials if Supabase fails
         } else if (data.user) {
           setUser(data.user);
           setIsAuthenticated(true);
@@ -80,7 +76,6 @@ export const AdminProvider = ({ children }) => {
         }
       }
 
-      // Fallback: Admin credentials from environment variables
       const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL || 'example@gmail.com';
       const ADMIN_PASSWORD = process.env.REACT_APP_ADMIN_PASSWORD || 'admin123';
       const SECURE_ADMIN_EMAIL = process.env.REACT_APP_SECURE_ADMIN_EMAIL || 'admin@beta-secure-2024';
@@ -88,7 +83,6 @@ export const AdminProvider = ({ children }) => {
 
       if ((email === ADMIN_EMAIL && password === ADMIN_PASSWORD) || 
           (email === SECURE_ADMIN_EMAIL && password === SECURE_ADMIN_PASSWORD)) {
-        // Create a mock user object for the hardcoded admin
         const mockUser = {
           id: 'admin-user-id',
           email: ADMIN_EMAIL,
@@ -120,7 +114,6 @@ export const AdminProvider = ({ children }) => {
   };
 
   const signup = async (email, password) => {
-    // Signup disabled for security - only one hardcoded admin account allowed
     return { success: false, error: 'Account creation is disabled' };
   };
 

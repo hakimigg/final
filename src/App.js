@@ -17,7 +17,6 @@ function App() {
       <AdminProvider>
         <Router>
           <Routes>
-            {/* Public Routes */}
             <Route path="/" element={
               <Layout>
                 <HomePage />
@@ -49,7 +48,6 @@ function App() {
               </Layout>
             } />
             
-            {/* Secret Admin Routes - Hard to guess URL for security */}
             <Route path="/beta-secure-admin-portal-2024" element={
               <AdminRoute>
                 <AdminDashboard />

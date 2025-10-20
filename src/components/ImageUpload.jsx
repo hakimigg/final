@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react';
-import { motion } from 'framer-motion';
 import { Upload, X, Image as ImageIcon, Loader } from 'lucide-react';
 import { uploadImage, validateImageFile } from '../utils/imageUpload';
 
@@ -18,7 +17,6 @@ export default function ImageUpload({
   const handleFileSelect = async (file) => {
     setError('');
     
-    // Validate file
     const validation = validateImageFile(file);
     if (!validation.valid) {
       setError(validation.error);
@@ -88,7 +86,6 @@ export default function ImageUpload({
       </label>
       
       {currentImage ? (
-        // Show current image with option to replace
         <div className="relative group">
           <img
             src={currentImage}
@@ -113,7 +110,6 @@ export default function ImageUpload({
           </div>
         </div>
       ) : (
-        // Show upload area
         <div
           className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all cursor-pointer ${
             dragActive
@@ -152,7 +148,6 @@ export default function ImageUpload({
         </div>
       )}
 
-      {/* Hidden file input */}
       <input
         ref={fileInputRef}
         type="file"
@@ -164,7 +159,6 @@ export default function ImageUpload({
   );
 }
 
-// Multi-image upload component
 export function MultiImageUpload({ 
   onImagesUploaded, 
   currentImages = [], 
@@ -266,7 +260,6 @@ export function MultiImageUpload({
         </span>
       </div>
 
-      {/* Current Images */}
       {currentImages.length > 0 && (
         <div className="grid grid-cols-3 gap-3 mb-4">
           {currentImages.map((url, index) => (
@@ -288,7 +281,6 @@ export function MultiImageUpload({
         </div>
       )}
 
-      {/* Upload Area */}
       {currentImages.length < maxImages && (
         <div
           className={`border-2 border-dashed rounded-xl p-6 text-center transition-all cursor-pointer ${
@@ -322,7 +314,6 @@ export function MultiImageUpload({
         </div>
       )}
 
-      {/* Hidden file input */}
       <input
         ref={fileInputRef}
         type="file"

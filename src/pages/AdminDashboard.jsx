@@ -13,7 +13,6 @@ import {
   TrendingUp,
   Filter,
   Tag,
-  Palette
 } from 'lucide-react';
 import { Product } from '../entities/Product';
 import { Type } from '../entities/Type';
@@ -24,7 +23,6 @@ export default function AdminDashboard() {
   const { logout, user } = useAdmin();
   const [activeTab, setActiveTab] = useState('products');
   
-  // Products state
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -32,7 +30,6 @@ export default function AdminDashboard() {
   const [showProductForm, setShowProductForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   
-  // Types state
   const [types, setTypes] = useState([]);
   const [typesLoading, setTypesLoading] = useState(true);
   const [typeSearchTerm, setTypeSearchTerm] = useState('');
@@ -67,7 +64,6 @@ export default function AdminDashboard() {
       const data = await Product.list('-created_date');
       setProducts(data);
       
-      // Calculate stats
       const totalProducts = data.length;
       const featuredProducts = data.filter(p => p.featured).length;
       const uniqueCategories = [...new Set(data.map(p => p.category))].length;
@@ -102,7 +98,6 @@ export default function AdminDashboard() {
     }
   };
 
-  // Product functions
   const handleDeleteProduct = async (productId) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
@@ -130,7 +125,6 @@ export default function AdminDashboard() {
     loadProducts();
   };
 
-  // Type functions
   const handleDeleteType = async (typeId) => {
     if (window.confirm('Are you sure you want to delete this type?')) {
       try {
@@ -158,7 +152,6 @@ export default function AdminDashboard() {
     loadTypes();
   };
 
-  // Filtered data
   const filteredProducts = products.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          product.description.toLowerCase().includes(searchTerm.toLowerCase());
@@ -173,7 +166,6 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Header */}
       <header className="bg-white shadow-sm border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
@@ -204,7 +196,6 @@ export default function AdminDashboard() {
       </header>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
-        {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -274,7 +265,6 @@ export default function AdminDashboard() {
           </motion.div>
         </div>
 
-        {/* Tabs */}
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 mb-8">
           <div className="flex border-b border-slate-200">
             <button
@@ -302,14 +292,11 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Products Tab */}
         {activeTab === 'products' && (
           <>
-            {/* Products Controls */}
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 mb-8">
               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
                 <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                  {/* Search */}
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
                     <input
@@ -321,7 +308,6 @@ export default function AdminDashboard() {
                     />
                   </div>
 
-                  {/* Category Filter */}
                   <div className="relative">
                     <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
                     <select
@@ -338,7 +324,6 @@ export default function AdminDashboard() {
                   </div>
                 </div>
 
-                {/* Add Product Button */}
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -351,7 +336,6 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            {/* Products Grid */}
             <div className="bg-white rounded-2xl shadow-sm border border-slate-200">
               <div className="p-6 border-b border-slate-200">
                 <h2 className="text-xl font-bold text-slate-900">
@@ -456,14 +440,11 @@ export default function AdminDashboard() {
           </>
         )}
 
-        {/* Types Tab */}
         {activeTab === 'types' && (
           <>
-            {/* Types Controls */}
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 mb-8">
               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
                 <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                  {/* Search */}
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
                     <input
@@ -476,7 +457,6 @@ export default function AdminDashboard() {
                   </div>
                 </div>
 
-                {/* Add Type Button */}
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -489,7 +469,6 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            {/* Types Grid */}
             <div className="bg-white rounded-2xl shadow-sm border border-slate-200">
               <div className="p-6 border-b border-slate-200">
                 <h2 className="text-xl font-bold text-slate-900">
@@ -517,7 +496,6 @@ export default function AdminDashboard() {
                       transition={{ delay: index * 0.1 }}
                       className="bg-slate-50 rounded-xl p-6 hover:shadow-md transition-all"
                     >
-                      {/* Type Image */}
                       {type.image_url && (
                         <div className="w-full h-32 rounded-xl overflow-hidden bg-slate-100 mb-4">
                           <img
@@ -563,7 +541,6 @@ export default function AdminDashboard() {
         )}
       </div>
 
-      {/* Product Form Modal */}
       {showProductForm && (
         <ProductForm
           product={editingProduct}
@@ -572,7 +549,6 @@ export default function AdminDashboard() {
         />
       )}
 
-      {/* Type Form Modal */}
       {showTypeForm && (
         <TypeForm
           type={editingType}
